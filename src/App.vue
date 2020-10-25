@@ -9,3 +9,9 @@ export default {
   name: 'App'
 }
 </script>
+<style>
+  .matchparent{
+    height: 100%;
+    width: 100%;
+  }
+</style>

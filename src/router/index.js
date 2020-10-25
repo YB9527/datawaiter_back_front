@@ -5,7 +5,8 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
-
+import userRouter from './modules/userRouter'
+import apiManagerRouter from './modules/apiManagerRouter'
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -31,6 +32,8 @@ import Layout from '@/layout'
  * all roles can be accessed
  */
 export const constantRoutes = [
+  apiManagerRouter,
+  userRouter,
   {
     path: '/login',
     component: () => import('@/views/login/index'),
