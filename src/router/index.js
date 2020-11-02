@@ -7,6 +7,7 @@ Vue.use(Router)
 import Layout from '@/layout'
 import userRouter from './modules/userRouter'
 import apiManagerRouter from './modules/apiManagerRouter'
+import connectionPoolRouter from "./modules/connectionPoolRouter";
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -32,6 +33,7 @@ import apiManagerRouter from './modules/apiManagerRouter'
  * all roles can be accessed
  */
 export const constantRoutes = [
+  connectionPoolRouter,
   apiManagerRouter,
   userRouter,
   {

@@ -10,9 +10,9 @@ const apiManagerRouter = {
   },
   children: [
     {
-      path: 'sourcemanager',
-      component: () => import('@/_datawaiter/views/api/sourceManager.vue'),
-      name: 'sourcemanager',
+      path: 'index',
+      component: () => import('@/_datawaiter/views/api/index.vue'),
+      name: 'index',
       meta: { title: 'API', noCache: true }
     },
   ]

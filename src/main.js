@@ -30,8 +30,32 @@ if (process.env.NODE_ENV === 'production') {
 
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
+
+import uuid from 'vue-uuid'
+Vue.use(uuid)
+
+import Tool from  '@/_datawaiter/js/Tool.js';
+Vue.prototype.$tool = Tool;
+
+import UITool from  '@/_datawaiter/js/UITool.js';
+Vue.prototype.$uiTool = UITool;
+
+import StrTool from  '@/_datawaiter/js/StrTool.js';
+Vue.prototype.$strTool = StrTool;
+
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
+/**
+ * 默认保留两位小数
+ */
+Vue.filter('toFixedFilter', (value,bit) => {
+
+  return Tool.toFixed(value,bit?bit:2,0);
+});
+Vue.filter('moneySymbol', (value) => {
+
+  return Tool.moneySymbol(value);
+});
 
 Vue.config.productionTip = false
 

@@ -22,6 +22,9 @@ export default {
     Sidebar,
     AppMain
   },
+  created(){
+
+  },
   mixins: [ResizeMixin],
   computed: {
     sidebar() {
