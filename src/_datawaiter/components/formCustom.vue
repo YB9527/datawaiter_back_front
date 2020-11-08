@@ -1,7 +1,7 @@
 <template>
   <div class="matchparent">
     <el-form label-position="right" v-model="elform.data" label-width="120px">
-      <el-form-item  v-for="(row,i) in elform.rows" :key="i" :label="row.label" :label-width="row.type === 'table'?'0px':''" >
+      <el-form-item  v-for="(row,i) in elform.rows" :key="i" :label="row.label" :label-width="row.type === 'table'?'0px':''">
         <el-select v-model="elform.data[row.name]" v-if="row.type === 'select'"  @input="onInput()">
           <el-option
             v-for="(item,i) in row.options"

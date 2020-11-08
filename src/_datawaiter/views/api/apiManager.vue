@@ -1,15 +1,18 @@
 <template>
   <div class="matchparent">
+
     <table-custom
+
       :datas="tableData"
       :columns="columns"
     ></table-custom>
-    <drawer-custom :modeldialog="modeldialog" v-if="modeldialog.show"></drawer-custom>
-    <dialog-custom :modeldialog="paramdialog" v-if="paramdialog.show"></dialog-custom>
+    <api-c-r-u-d  :modeldialog="modeldialog" v-if="modeldialog.show" :api="modeldialog.elform.data"></api-c-r-u-d>
 
-    <el-dialog :title="preveiwDialog.title" :visible.sync="preveiwDialog.show" :width="preveiwDialog.width" >
-      <table-custom :datas="preveiwDialog.datas" :columns="preveiwDialog.columns"></table-custom>
-    </el-dialog>
+
+    <!--<drawer-custom :modeldialog="modeldialog" v-if="modeldialog.show"></drawer-custom>-->
+   <!-- <dialog-custom :modeldialog="paramdialog" v-if="paramdialog.show"></dialog-custom>-->
+
+
 
   </div>
 </template>
@@ -22,10 +25,11 @@
   import ApiURLManager from '@/_datawaiter/api/ApiURLManager.js'
   import LevelURLManager from '@/_datawaiter/api/LevelURLManager.js'
   import DrawerCustom from "../../components/drawerCustom";
+  import ApiCRUD from "./apiCRUD";
 
   export default {
     name: "ApiManager",
-    components: {DrawerCustom, DialogCustom, TableCustom},
+    components: {ApiCRUD, DrawerCustom, DialogCustom, TableCustom},
     props: ["levelId"],
     data() {
       return {
@@ -132,6 +136,8 @@
         level: {},
         poolArray: [],
         poolMap: {},
+        cruddArray: [],
+        crudMap: {},
         questMethodArray: [],
         accessArray: [],
         accessMap: {},
@@ -144,84 +150,8 @@
           elform: {},
           okClickName: "modeldialogOk"
         },
-        paramdialog: {
-          show: false,
-          width: '500px',
-          titlepo: {add: "添加参数", edit: "编辑参数"},
-          title: "",
-          currenthandle: "",
-          elform: {},
-          okClickName: "paramDialogOk"
-        },
-        paramTableColumns: [
-          {
-            type: "index",
-            label: "序列号",
-            width: "80",
-            prop: "",
-            isShow: true,
-            align: "center"
-          },
-          {
-            label: "参数名字",
-            prop: "paramName",
-            isShow: true,
-            align: "center"
-          },
-          {
-            label: "测试值",
-            prop: "testValue",
-            isShow: true,
-            align: "center"
-          },
-          {
-            type: "button",
-            label: "操作",
-            width: "300",
-            prop: "",
-            isShow: true,
-            align: "center",
-            headers: [{
-              type: 'button',
-              label: "添加参数",
-              click: () => {
-                this.addParam();
-              },
-            },
-              {
-                type: 'button',
-                label: "预览",
-                click: () => {
-                  this.previewingData(this.modeldialog.elform.data);
-                },
-              }
-            ],
-            list: [
-              {
-                label: "编辑",
-                type: "warning",
-                click: (index, row) => {
-                  this.editParam(index, row);
-                },
-              },
-              {
-                label: "删除",
-                type: "danger",
-                click: (index, row) => {
-                  this.removeParam(index, row);
 
-                },
-              }
-            ]
-          },
-        ],
-        preveiwDialog:{
-          show: false,
-          width: '80%',
-          title: "预览数据",
-          datas:[],
-          columns:[],
-        }
+
       }
     },
     created() {
@@ -233,44 +163,7 @@
       }
     },
     methods: {
-      previewingData(api) {
-        let url = window.datawaiterip + "/datawaiter" + api.rootURL + "/" + api.selfURL;
 
-        if (api.params && api.params.length > 0) {
-          url = url + "?";
-          for (let param of api.params) {
-            url = url + param.paramName + "=" + param.testValue;
-          }
-          url = url.replace("[", "").replace("]", "");
-        }
-        systemApi({url:ApiURLManager.findDataByAPI(),data:api})
-          .then(datas=>{
-            if(!datas || datas.length <= 0){
-              this.$uiTool.notify({message:"无数据",title:"预览数据"});
-              return;
-            }
-            let columns = [{
-              type: "index",
-              label: "序列号",
-              width: "120",
-              prop: "",
-              isShow: true,
-              align: "center"
-            },];
-            this.preveiwDialog.columns = columns;
-            this.preveiwDialog.datas = datas;
-            for (let columnname in datas[0]) {
-              columns.push({
-                label: columnname,
-                prop: columnname,
-                isShow: true,
-                align: "center"
-              });
-            }
-            this.preveiwDialog.show = true;
-          });
-
-      },
       /**
        * 打开网页
        * @param index
@@ -292,45 +185,8 @@
             window.open(url, '_blank')
           });
       },
-      editParam(index, row) {
 
-        let dialog = this.paramdialog;
-        dialog.title = dialog.titlepo.edit;
-        dialog.currenthandle = this.$strTool.modelhandle[2];
-        dialog.elform.rows = [
-          {name: 'paramName', label: "名称："},
-          {name: 'testValue', label: "测试值："},
-        ];
 
-        dialog.elform.data = this.$tool.copyPo(row);
-        dialog.show = true;
-      },
-      removeParam(index, row) {
-        this.$uiTool.confirm({
-          message: "确定要删除：" + row.paramName + " 参数吗？",
-          callback: flag => {
-            if (flag) {
-              console.log(11)
-              this.modeldialog.elform.data.params.splice(index, 1);
-              console.log(this.modeldialog.elform.data.params)
-            }
-          }
-        });
-
-      },
-      paramDialogOk(dialog) {
-
-        let param = dialog.elform.data;
-        let params = this.modeldialog.elform.data.params;
-        if (dialog.currenthandle === this.$strTool.modelhandle[0]) {
-          params.push(param);
-        } else {
-          console.log(33);
-          this.$tool.replaceModel(params, param);
-        }
-        console.log(params);
-        dialog.show = false;
-      },
       modeldialogOk(dialog) {
 
         let map = {api: dialog.elform.data, params: dialog.elform.data.params};
@@ -348,26 +204,13 @@
           }
         });
       },
-      addParam() {
 
-        let dialog = this.paramdialog;
-        dialog.title = dialog.titlepo.add;
-        dialog.currenthandle = this.$strTool.modelhandle[0];
-
-        dialog.elform.rows = [
-          {name: 'paramName', label: "名称："},
-          {name: 'testValue', label: "测试值："},
-        ];
-        dialog.elform.data = this.newParam();
-        dialog.show = true;
-      },
       addApi() {
         let dialog = this.modeldialog;
         dialog.title = dialog.titlepo.add;
         dialog.elform.data = this.newApi();
         dialog.currenthandle = this.$strTool.modelhandle[0];
         dialog.elform.rows = this.newFormRows();
-
         dialog.show = true;
       },
       newFormRows() {
@@ -379,6 +222,7 @@
           {name: 'databaseConnectId', label: "数据库类型：", type: "select", options: this.poolArray,},
           {name: 'questMethod', label: "请求方式：", type: "select", options: this.questMethodArray},
           {name: 'accessId', label: "访问控制：", type: "select", options: this.accessArray},
+          {name: 'crud', label: "数据操作：", type: "select", options: this.crudArray},
           {name: 'sql_', label: "SQL语句："},
           {
             name: 'id',
@@ -399,6 +243,8 @@
           data.rootURL = this.rootURL;
           data.levelId = this.levelId;
         } else {
+
+        }
           data = {
             id: id,
             label: "",
@@ -408,9 +254,11 @@
             levelId: this.levelId,
             databaseConnectId: this.poolArray[0].id,
             questMethod: this.questMethodArray[0],
+            crud:this.crudArray[0].id,
             sql_: "",
           };
-        }
+
+
         return data;
       },
       findRootURL(url, level) {
@@ -424,24 +272,8 @@
         }
         return url;
       },
-      newParam() {
-        let data = this.paramdialog.elform.data;
-        let id = this.$uuid.v4();
-        if (data) {
-          data = JSON.parse(JSON.stringify(data));
-          data.id = id;
-        } else {
-          data = {
-            id: id,
-            apiId: this.modeldialog.elform.data.id,
-            paramName: "",
-            testValue: "",
-          };
-        }
-        return data;
-      },
-      editApi(index, row) {
 
+      editApi(index, row) {
         let dialog = this.modeldialog;
         dialog.elform.data = this.$tool.copyPo(row);
         systemApi({url: ApiURLManager.findParamsByApiId() + row.id})
@@ -497,6 +329,11 @@
           .then(datas => {
             this.accessArray = datas;
             this.accessMap = this.$tool.groupByAttributeSingle(datas);
+          });
+        systemApi({url: SysURLManager.findEnums(this.$strTool.curd)})
+          .then(datas => {
+            this.crudArray = datas;
+            this.crudMap = this.$tool.groupByAttributeSingle(datas);
 
           });
       }

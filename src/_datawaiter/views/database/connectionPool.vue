@@ -83,6 +83,13 @@
             align: "center"
           },
           {
+            label: "API数量",
+            width: "120",
+            prop: "apiCount",
+            isShow: true,
+            align: "center"
+          },
+          {
             type: "button",
             label: "操作",
             width: "300",
@@ -140,6 +147,7 @@
         });
       systemApi({url: DatabaseConnURLManager.findAll()})
         .then(datas => {
+          console.log(1,datas);
           this.tableData = datas;
         });
 
@@ -179,22 +187,16 @@
         ];
       },
       newPool() {
-        let data = this.modeldialog.elform.data;
         let id = this.$uuid.v4();
-        if(data){
-          data = JSON.parse(JSON.stringify(data));
-          data.id = id;
-        }else{
-          data = {
+        let data = {
             id: id,
             label:"",
             ip: "127.0.0.1:3306",
             databaseEnum: this.databaseEnumArray[0],
-            databaseName: "datawaiter",
-            username: "root",
-            password: "1234",
+            databaseName: "",
+            username: "",
+            password: "",
           };
-        }
         return data;
       },
       addConnection() {

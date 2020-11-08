@@ -12,3 +12,6 @@ exports.questmethodenumname = questmethodenumname;
 
 var accessstate =  "cn.yb.datawaiter.model.AccessState";
 exports.accessstate = accessstate;
+
+var curd =  "cn.yb.datawaiter.jdbc.model.CRUDEnum";
+exports.curd = curd;

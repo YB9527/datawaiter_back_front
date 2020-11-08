@@ -13,8 +13,10 @@ export function get() {
 
 export function systemApi({url,method,data}) {
 
+
   let custom= {url: url, method: method?method:"get",baseURL: datawaiterip};
   if(method === "post" || data){
+    custom.method = "post";
     custom.data  = data;
     custom.header={
       'Content-Type':'application/json'  //如果写成contentType会报错
