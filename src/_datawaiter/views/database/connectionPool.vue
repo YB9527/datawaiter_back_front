@@ -4,7 +4,7 @@
       :datas="tableData"
       :columns="columns"
     ></TableCustom>
-    <dialog-custom :modeldialog="modeldialog" v-if="modeldialog.show" @modeldialogOk="modeldialogOk"></dialog-custom>
+    <dialog-custom :modeldialog="modeldialog" v-if="modeldialog.show" ></dialog-custom>
    <!-- <el-dialog :title="modeldialog.title" :visible.sync="modeldialog.show" v-if="modeldialog.show" width="500px">
       <formCustom :elform="modeldialog.elform"></formCustom>
       <div slot="footer" class="dialog-footer">
@@ -146,7 +146,7 @@
     },
     methods: {
       modeldialogOk(modeldialog) {
-        console.log(222,modeldialog);
+
         switch (modeldialog.currenthandle) {
           case this.$strTool.modelhandle[0]:
             systemApi({url:DatabaseConnURLManager.addConnection(),method: "post",data:modeldialog.elform.data})

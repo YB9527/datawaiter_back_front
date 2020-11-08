@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="modeldialog.title" :visible.sync="modeldialog.show" :width="modeldialog.width">
+  <el-dialog :title="modeldialog.title" :visible.sync="modeldialog.show" :width="modeldialog.width" >
     <form-custom :elform="modeldialog.elform"></form-custom>
     <div slot="footer" class="dialog-footer">
       <el-button @click="cancel">取 消</el-button>

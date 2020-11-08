@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="right">
-        <api-manager :datas="apidatas"  v-show="modeldialog.currentnode" ></api-manager>
+        <api-manager :levelId="levelId"  v-show="modeldialog.currentnode" ></api-manager>
     </div>
 
     <el-dialog  :title="modeldialog.title" :visible.sync="modeldialog.show" width="40%" >
@@ -46,6 +46,7 @@
     data() {
       return {
         expandedkeys: [1],
+        levelId:"",
         apidatas:[],
         modeldialog: {
           currentnode:undefined,
@@ -64,8 +65,8 @@
     watch:{
       'modeldialog.currentnode'(node,oldValue){
           if(node){
-            let levelid = node.id;
-            systemApi({url :ApiURLManager.findByLevelId()+levelid})
+             this.levelId = node.id;
+            systemApi({url :ApiURLManager.findByLevelId()+this.levelId})
               .then(datas => {
                 let roots = this.findRoots(datas);
                 let parentidMap = this.$tool.groupByAttribute(datas, "parentid");
@@ -74,6 +75,7 @@
                 }
               });
           }else{
+            this.levelId = "";
             this.apidatas = [];
           }
 
@@ -161,8 +163,8 @@
             data.parentFullSimpleName = data.parentFullSimpleName+"/"+parent.simpleName;
             data.parentFullName = data.parentFullName+"/"+parent.name;
           }
-          data.parentFullSimpleName = data.parentFullSimpleName+"/";
-          data.parentFullName = data.parentFullName+"/";
+          data.parentFullSimpleName = data.parentFullSimpleName;
+          data.parentFullName = data.parentFullName;
         }
 
         return data;

@@ -14,6 +14,7 @@
           :key="index"
           :fixed="item.fixed"
           :prop="item.prop"
+
           :label="item.label"
           :align="item.align ? item.align : 'center'"
           :width="item.width"
@@ -76,9 +77,14 @@
           :align="item.align ? item.align : 'center'"
           :width="item.width"
           :type="item.type"
+
         >
           <template slot="header"  slot-scope="scope">
             <table-header :item="item"></table-header>
+          </template>
+          <template slot-scope="scope">
+           {{ item.formatter? item.formatter(scope.row[item.prop]) : scope.row[item.prop]}}
+            <!--可以自行增加按钮，请改变点击事件的第二个参数，父组件会根据第二个参数判断当前点击的是什么按钮-->
           </template>
         </el-table-column>
         <!--可以传align,width和type来控制表格的居中，宽度和类型（比如需要序号，type传index）-->
@@ -124,8 +130,15 @@
         currentPage: 1
       };
     },
+    filters:{
+      formatter(){
+        console.log(11)
+      },
+    },
     methods: {
-
+      formatter(){
+        console.log(11)
+      },
       test(obj) {
         console.log(obj);
       },

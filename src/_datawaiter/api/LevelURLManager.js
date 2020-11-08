@@ -14,3 +14,8 @@ var   deleteLevelById = function () {
   return baseurl+"/deletelevelbyid?id=";
 };
 exports.deleteLevelById = deleteLevelById;
+
+var   findLevelAndParentId = function () {
+  return baseurl+"/findLevelAndParentId?id=";
+};
+exports.findLevelAndParentId = findLevelAndParentId;

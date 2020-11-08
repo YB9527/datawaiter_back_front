@@ -10,7 +10,15 @@ var   findByTableName = function (tablename) {
 exports.findByTableName = findByTableName;
 
 
+var findByTableNameAndId = function (tablename, id) {
+  return baseurl + "/findByTableNameAndId?tableName=" + tablename + "&id=" + id;
+};
+exports.findByTableNameAndId = findByTableNameAndId;
+
+
+
 var   findEnums = function (enumClassName) {
   return baseurl+"/findEnums?enumClassName=" + enumClassName;
 };
 exports.findEnums = findEnums;
+

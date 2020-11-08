@@ -3,12 +3,13 @@ import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
+let timout = 50000;
 // create an axios instance
 const service = axios.create({
 
   //baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
+  timeout: timout // request timeout
 })
 
 // request interceptor
@@ -25,8 +26,7 @@ service.interceptors.request.use(
     return config
   },
   error => {
-    console.log(1111);
-    // do something with request error
+
     console.log(error) // for debug
     return Promise.reject(error)
   }
@@ -52,7 +52,7 @@ service.interceptors.response.use(
       Message({
         message: res.msg,
         type: 'error',
-        duration: 5 * 1000
+        duration: timout
       })
 
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
@@ -78,7 +78,7 @@ service.interceptors.response.use(
     Message({
       message: error,
       type: 'error',
-      duration: 5 * 1000
+      duration: timout
     })
     return Promise.reject(error)
   }

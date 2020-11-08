@@ -85,13 +85,12 @@ var groupByAttribute = function (array, attribute) {
 exports.groupByAttribute = groupByAttribute;
 
 //通过属性来
-var groupByAttributeSingle = function (array, attribute) {
+var groupByAttributeSingle = function (array, attribute='id') {
   let map = {};
   if (array) {
     for (let item of array) {
       let key = item[attribute];
       map[key] = item;
-
     }
   }
 
