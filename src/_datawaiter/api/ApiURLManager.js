@@ -30,3 +30,9 @@ var   findDataByAPI = function () {
   return baseurl+"/findDataByAPI";
 };
 exports.findDataByAPI = findDataByAPI;
+
+
+var   testPostApi = function () {
+  return baseurl+"/testPostApi";
+};
+exports.testPostApi = testPostApi;

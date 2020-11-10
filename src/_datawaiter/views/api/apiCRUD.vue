@@ -95,11 +95,66 @@
            <!-- <el-input type="textarea" v-model="api.sql_"></el-input>-->
           </div>
         </div>
-        <table-custom
+        <el-table
+          :data="api.params"
+          style="width: 100%">
+          <el-table-column
+            prop="paramName"
+            :label='api.questMethod === "GET" ? "参数名字" : "表格名称"'
+            >
+          </el-table-column>
+          <el-table-column
+            prop="testValue"
+            :label='api.questMethod === "GET" ? "测试值" : "JSON字符串"'
+          >
+          </el-table-column>
+          <el-table-column
+            align="right">
+            <template slot="header" slot-scope="scope">
+              <el-button type="info" @click="addParam()"  size="mini" plain>添加参数</el-button>
+              <el-button type="info" @click="previewingData(api)" v-if="api.questMethod === 'GET'" size="mini" plain>预览</el-button>
+              <el-button type="info" @click="testPostApi(api)" v-if="api.questMethod !== 'GET'" size="mini" plain>测试</el-button>
+            </template>
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="editParam(scope.$index, scope.row)">编辑</el-button>
+              <el-button
+                size="mini"
+                @click="removeParam(scope.$index, scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+
+      <!--  <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th scope="col"  style="width: 100px">{{api.questMethod === "GET" ? "参数名字" : "表格名称"}}</th>
+            <th scope="col"  style="width: 100px">{{api.questMethod === "GET" ? "测试值" : "JSON字符串"}}</th>
+            <th scope="col" >
+              <el-button type="info" @click="addParam()"  size="mini" plain>添加参数</el-button>
+              <el-button type="info" @click="previewingData(api)" v-if="api.questMethod === 'GET'" size="mini" plain>预览</el-button>
+              <el-button type="info" @click="testPostApi(api)" v-if="api.questMethod !== 'GET'" size="mini" plain>测试</el-button>
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(param,i) in api.params">
+            <td>{{ param.paramName}}</td>
+            <td>{{ param.testValue}}</td>
+            <th scope="col" >
+              <el-button type="warning"  @click="editParam(i, param)" size="mini" plain>编辑</el-button>
+              <el-button type="danger"   @click="removeParam(i, param)" size="mini" plain>删除</el-button>
+            </th>
+          </tr>
+          </tbody>
+        </table>-->
+
+       <!-- <table-custom
           :datas="api.params"
           :columns="paramTableColumns">
-        </table-custom>
-        <!-- <form-custom :elform="modeldialog.elform"></form-custom>-->
+        </table-custom>-->
+         <!--<form-custom :elform="modeldialog.elform"></form-custom>-->
         <div class="demo-drawer__footer" style="float: right">
           <el-button @click="cancel" size="medium">取 消</el-button>
           <el-button type="primary" @click="ok" size="medium">确 定</el-button>
@@ -238,6 +293,32 @@
             this.api.crud = "INSERT";
             break;
         }
+
+      },
+      testPostApi(api){
+
+        if (api.params && api.params.length > 0) {
+          systemApi({url:ApiURLManager.testPostApi(),data:api })
+            .then(count=>{
+              this.$uiTool.messageBox({message:"执行成功的个数："+count});
+            });
+        }else{
+          this.$uiTool.notify({message:"没有参数无法测试"})
+        }
+
+       /* let url = window.datawaiterip + "/datawaiter" + api.rootURL + "/" + api.selfURL;
+        var formData = new FormData();
+        if (api.params && api.params.length > 0) {
+          for (let param of api.params) {
+            formData.append(param.paramName ,param.testValue);
+          }
+          systemApi({url:url,data:formData })
+            .then(count=>{
+              this.$uiTool.messageBox({message:"执行成功的个数："+count});
+            });
+        }else{
+          this.$uiTool.notify({message:"没有参数无法测试"})
+        }*/
 
       },
       previewingData(api) {
