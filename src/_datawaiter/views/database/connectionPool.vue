@@ -112,6 +112,13 @@
                 },
               },*/
               {
+                label: "装备Bean",
+                type: "info",
+                click: (index, row) => {
+                  this.$router.push({path:'/mapperconfig/index?databaseId='+row.id});
+                },
+              },
+              {
                 label: "编辑",
                 type: "warning",
                 click: (index, row) => {
@@ -141,13 +148,13 @@
     },
     created() {
       //所有数据库类型
-      systemApi({url: DatabaseConnURLManager.findDatabaseEnum()})
+      this.databaseEnumArray = this.$store.state.share.databaseEnumArray;
+     /* systemApi({url: DatabaseConnURLManager.findDatabaseEnum()})
         .then(datas => {
           this.databaseEnumArray = datas;
-        });
+        });*/
       systemApi({url: DatabaseConnURLManager.findAll()})
         .then(datas => {
-          console.log(1,datas);
           this.tableData = datas;
         });
 

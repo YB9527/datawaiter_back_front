@@ -10,6 +10,10 @@ var   saveApi = function () {
 };
 exports.saveApi = saveApi;
 
+var   findApiById = function () {
+  return baseurl+"/findApiById?id=";
+};
+exports.findApiById = findApiById;
 
 /**
  * edit 不区分 编辑、还是保持

@@ -4,7 +4,7 @@
       {{item.label}}
     </div>
     <div v-if="item.headers">
-      <span v-for="(header,i) in item.headers">
+      <span v-for="(header,i) in item.headers" style="margin-right: 5px">
          <el-input
            v-if="header.type == 'input'"
            v-model="header.model"

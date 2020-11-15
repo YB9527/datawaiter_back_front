@@ -94,6 +94,19 @@
             align: "center"
           },
           {
+            label: "操作类型",
+            prop: "crud",
+            isShow: true,
+            align: "center",
+            formatter:value=>{
+              let result = this.$store.state.share.crudMap[value];
+              if(result){
+                return result.label;
+              }
+              return value;
+            }
+          },
+          {
             type: "button",
             label: "操作",
             width: "300",
@@ -111,6 +124,13 @@
               {
                 label: "网页",
                 type: "info",
+                show:(index,api) =>{
+                  if(api.questMethod === "GET"){
+                    return true;
+                  }else{
+                    return false;
+                  }
+                },
                 click: (index, row) => {
                   this.openURL(index, row);
                 },
@@ -275,19 +295,26 @@
 
       editApi(index, row) {
         let dialog = this.modeldialog;
-        dialog.elform.data = this.$tool.copyPo(row);
-        systemApi({url: ApiURLManager.findParamsByApiId() + row.id})
-          .then(datas => {
+        new Promise(resolve=>{
+          systemApi({url: ApiURLManager.findApiById() + row.id})
+            .then(api=>{
+              return resolve(api);
+            });
+        }).then(api=>{
+          dialog.elform.data = api;
+          systemApi({url: ApiURLManager.findParamsByApiId() + row.id})
+            .then(datas => {
+              dialog.elform.data.params = datas;
+              if (!dialog.elform.data.params) {
+                dialog.elform.data.params = [];
+              }
+              dialog.elform.rows = this.newFormRows();
+              dialog.title = dialog.titlepo.edit;
+              dialog.currenthandle = this.$strTool.modelhandle[2];
+              dialog.show = true;
+            });
+        });
 
-            dialog.elform.data.params = datas;
-            if (!dialog.elform.data.params) {
-              dialog.elform.data.params = [];
-            }
-            dialog.elform.rows = this.newFormRows();
-            dialog.title = dialog.titlepo.edit;
-            dialog.currenthandle = this.$strTool.modelhandle[2];
-            dialog.show = true;
-          });
 
 
       },
@@ -321,6 +348,13 @@
             this.poolArray = datas;
             this.poolMap = this.$tool.groupByAttributeSingle(datas);
           });
+
+        this.questMethodArray =  this.$store.state.share.questMethodArray;
+        this.accessArray =  this.$store.state.share.accessArray;
+        this.accessMap =  this.$store.state.share.accessMap;
+        this.crudArray =  this.$store.state.share.crudArray;
+        this.crudMap =  this.$store.state.share.crudMap;
+        /*
         systemApi({url: SysURLManager.findEnums(this.$strTool.questmethodenumname)})
           .then(datas => {
             this.questMethodArray = datas;
@@ -335,7 +369,7 @@
             this.crudArray = datas;
             this.crudMap = this.$tool.groupByAttributeSingle(datas);
 
-          });
+          });*/
       }
     }
   }

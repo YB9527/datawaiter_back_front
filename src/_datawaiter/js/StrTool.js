@@ -13,5 +13,15 @@ exports.questmethodenumname = questmethodenumname;
 var accessstate =  "cn.yb.datawaiter.model.AccessState";
 exports.accessstate = accessstate;
 
-var curd =  "cn.yb.datawaiter.jdbc.model.CRUDEnum";
-exports.curd = curd;
+var crud =  "cn.yb.datawaiter.jdbc.model.CRUDEnum";
+exports.crud = crud;
+
+var AutoCreateMapper =  "cn.yb.datawaiter.model.AutoCreateMapper";
+exports.AutoCreateMapper = AutoCreateMapper;
+
+
+var mappertablename =  "mapper";
+exports.mappertablename = mappertablename;
+
+var PoRelation =  "cn.yb.datawaiter.model.PoRelation";
+exports.PoRelation = PoRelation;

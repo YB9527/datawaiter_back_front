@@ -48,15 +48,19 @@
             <table-header :item="item"></table-header>
           </template>
           <!--if判断的是父组件传的表头是操作的id名-->
-          <template slot-scope="scope">
+          <template slot-scope="scope" style="text-align: right">
+            <el-button-group>
             <el-button
               v-for="(item2,i) in item.list"
               :key="i"
               @click="item2.click(scope.$index,scope.row)"
               size="mini"
               :type="item2.type"
-            >{{ item2.label }}</el-button
-            >
+              v-show="item2.show ?(item2.show( scope.$index,scope.row)):true"
+            >{{ item2.label }}</el-button>
+              </el-button-group>
+
+
             <!--可以自行增加按钮，请改变点击事件的第二个参数，父组件会根据第二个参数判断当前点击的是什么按钮-->
           </template>
         </el-table-column>
