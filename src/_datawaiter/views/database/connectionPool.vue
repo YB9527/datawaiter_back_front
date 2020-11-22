@@ -179,28 +179,28 @@
           });
 */
         let users = [];
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 9527; i++) {
           let user = {
             id: this.$uuid.v4(),
             name: 'AAA' + i,
             password: 'bb' + i,
             t: i,
-            jtcys: [],
+            jtcy: [],
           };
-          for (let j = 0; j < 5; j++) {
+         /* for (let j = 0; j < 5; j++) {
             let jtcy = {
               id: this.$uuid.v4(),
               name: 'JTCY' + i,
             };
-            user.jtcys.push(jtcy);
-            break
-          }
+            user.jtcy.push(jtcy);
+           // break
+          }*/
           users.push(user);
-          break;
+         // break;
         }
         let formData = new FormData;
-        formData.append("users", JSON.stringify(users));
-        systemApi({url: 'http://127.0.0.1:3333/datawaiter/root/saveUser', data: formData})
+        formData.append("user", JSON.stringify(users));
+        systemApi({url: 'http://127.0.0.1:3333/datawaiter/test/jtcy/saveUser', data: formData})
           .then(count => {
             console.log("保存了：" + count);
           });

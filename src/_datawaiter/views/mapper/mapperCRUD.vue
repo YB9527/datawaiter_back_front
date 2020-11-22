@@ -78,6 +78,8 @@
                 <mapper-select  v-if="scope.row.poRelation !== 'no'"
                                 :dataCustom="{data:scope.row,key:'column_MapperId'}"
                                 :databaseId="mapper.databaseId"
+                                :isReflect="true"
+                                @mapperSelectChange="mapperSelectChange"
                                 :crudEnum="'SELECT'"></mapper-select>
                <!-- <el-cascader
                   placeholder="选择映射"
@@ -92,7 +94,7 @@
               label='映射对象字段'
             >
               <template slot-scope="scope">
-                <input class="form-control" v-model="scope.row.column_" v-if="scope.row.poRelation !== 'no'">
+                <input class="form-control" :disabled="true" v-model="scope.row.column_" v-if="scope.row.poRelation !== 'no'">
               </template>
             </el-table-column>
 
@@ -243,8 +245,13 @@
 
 
     methods: {
-      mapperSelectChange(mapperId){
-        console.log(111,mapperId)
+      mapperSelectChange({data,mapper}){
+        let property =mapper.resultColumns[0].property;
+       //console.log(2,data,property);
+        if(property){
+          data.column_=property;
+        }
+        //console.log(111,property)
       },
 
 

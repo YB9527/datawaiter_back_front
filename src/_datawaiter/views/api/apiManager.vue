@@ -206,7 +206,6 @@
                   }
                   url = url.replace("[", "").replace("]", "");
                 }
-                //console.log(url);
                 window.open(url, '_blank')
               }
           });

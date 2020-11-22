@@ -26,7 +26,7 @@
         <div class="form-group row">
           <label class="col-sm-3 col-form-label">本级URL：</label>
           <div class="col-sm-9">
-            <input type="email" class="form-control" v-model="api.selfURL">
+            <input type="email" class="form-control" @change="setdatawaiterip" v-model="api.selfURL">
           </div>
         </div>
         <div class="form-group row">
@@ -321,7 +321,8 @@
 
     methods: {
       setdatawaiterip(){
-        this.datawaiterip =   window.datawaiterip+'/'+'datawaiter'+this.api.rootURL+'/'+this.api.selfURL
+        this.datawaiterip =   window.datawaiterip+'/'+'datawaiter'+this.api.rootURL+'/'+this.api.selfURL;
+        //console.log(this.datawaiterip)
       },
 
       mapperdialogOk(dialog) {

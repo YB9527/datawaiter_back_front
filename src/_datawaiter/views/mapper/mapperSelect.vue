@@ -19,6 +19,7 @@
       databaseId: '',
       crudEnum: '',
       value:'',
+      isReflect:false,
     },
     data() {
       return {
@@ -27,6 +28,7 @@
         column_MapperIdOptions: [],
         self_mapperId: "",
         mapper: {},
+        mapperIdMap:{},
       }
     },
 
@@ -34,7 +36,14 @@
       select(v){
         //console.log(v);
         if(v && v.length >0){
-          this.dataCustom.data[this.dataCustom.key] =v[v.length-1];
+          let mapperId = v[v.length-1];
+          this.dataCustom.data[this.dataCustom.key] =mapperId;
+        //console.log(this.mapperIdMap[mapperId].resultColumns[0]);
+          //console.log([this.dataCustom.data,this.mapperIdMap[mapperId]])
+          let data = {data:this.dataCustom.data,mapper: this.mapperIdMap[mapperId]};
+          //data={aa:'123',bb:'11111'};
+          //console.log(1,data)
+          this.$emit('mapperSelectChange',data);
         }
       },
       databaseId(){
@@ -75,10 +84,15 @@
             let tableMap = this.$tool.groupByAttributeSingle(options, "value");
             systemApi({url: MapperURLManager.findMappersByDatabaseId(this.databaseId)})
               .then(mappers => {
-
+                this.mapperIdMap = this.$tool.groupByAttributeSingle(mappers);
                 for (let mapper of mappers) {
                   let tem = tableMap[mapper.tableName];
-
+                  if(this.isReflect){
+                    //如果选择的是映射对象，那么，resultcoumns 个数必须是 1
+                    if(!mapper.resultColumns || mapper.resultColumns.length !== 1){
+                      continue;
+                    }
+                  }
                   if ((this.crudEnum === 'SELECT' && mapper.crud ===  'SELECT') || (this.crudEnum !== 'SELECT' && mapper.crud !==  'SELECT')) {
                     tem.children.push({value: mapper.id, label: mapper.label});
                   }
@@ -91,7 +105,7 @@
                 this.column_MapperIdOptions = options;
                 let selectValue =  this.dataCustom.data[this.dataCustom.key];
                 this.setSelect(selectValue,options);
-
+                //console.log(mappers);
               });
           });
       },

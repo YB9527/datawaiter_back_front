@@ -101,6 +101,13 @@
             align: "center"
           },
           {
+            label: "API数量",
+            width: "60",
+            prop: "apiCount",
+            isShow: true,
+            align: "center"
+          },
+          {
             type: "button",
             label: "操作",
             width: "300",
@@ -125,7 +132,7 @@
                 label: "编辑",
                 type: "warning",
                 click: (index, row) => {
-
+                  //console.log(3,row);
                   this.editMapper(index, row);
                 },
               },
@@ -216,10 +223,13 @@
 
         Promise.all([this.findCurrentMappers()])
           .then(results => {
+           //console.log(results[0]);
             this.autoCreateMapperArray = this.$store.state.share.autoCreateMapperArray;
             this.crudArray = this.$store.state.share.crudArray;
             this.crudMap = this.$store.state.share.crudMap;
-            this.tableData = results[0]
+            this.accessArray = this.$store.state.share.accessArray;
+            this.questMethodArray = this.$store.state.share.questMethodArray;
+            this.tableData = results[0];
           });
       },
       findCurrentMappers() {
@@ -242,32 +252,39 @@
           if (dialog.currenthandle === this.$strTool.modelhandle[0]) {
             this.tableData.push(mapper);
           } else if (dialog.currenthandle === this.$strTool.modelhandle[2]) {
-            this.$tool.replaceModel(this.tableData,mapper);
+            this.$tool.replaceModel(this.tableData, mapper);
           }
         });
       },
 
       addMapper() {
         let dialog = this.mapperdialog;
+       // console.log(1,dialog)
         dialog.title = dialog.titlepo.add;
-        dialog.elform.data = this.newApi();
+        dialog.data = this.newMapper();
         dialog.currenthandle = this.$strTool.modelhandle[0];
         dialog.show = true;
       },
       newMapper() {
-        let data = this.mapperdialog.elform.data;
-        let id = this.$uuid.v4();
-        data = {
-          id: id,
+        //let data = this.mapperdialog.elform.data;
+        // let id = this.$uuid.v4();
+        //console.log(this.accessArray);
+        let data = {
+          id: this.$uuid.v4(),
           label: "",
           accessId: this.accessArray[0].id,
-          params: [],
           levelId: this.levelId,
-          databaseConnectId: this.poolArray[0].id,
+          databaseId: this.databaseId,
           questMethod: this.questMethodArray[0],
           crud: this.crudArray[0].id,
           sql_: "",
+          tableName:this.tableName,
+          resultColumns:[],
+          resultColumnCUDs:[],
+          apiId:"",
+          mapperId:"",
         };
+        //console.log(11,data)
         return data;
       },
 
@@ -283,17 +300,17 @@
 
             dialog.show = true;
 
-           /* systemApi({url: ApiURLManager.findParamsByApiId() + row.id})
-              .then(datas => {
-                dialog.elform.data.params = datas;
-                if (!dialog.elform.data.params) {
-                  dialog.elform.data.params = [];
-                }
-                dialog.elform.rows = this.newFormRows();
-                dialog.title = dialog.titlepo.edit;
-                dialog.currenthandle = this.$strTool.modelhandle[2];
-                dialog.show = true;
-              });*/
+            /* systemApi({url: ApiURLManager.findParamsByApiId() + row.id})
+               .then(datas => {
+                 dialog.elform.data.params = datas;
+                 if (!dialog.elform.data.params) {
+                   dialog.elform.data.params = [];
+                 }
+                 dialog.elform.rows = this.newFormRows();
+                 dialog.title = dialog.titlepo.edit;
+                 dialog.currenthandle = this.$strTool.modelhandle[2];
+                 dialog.show = true;
+               });*/
           });
 
       },
@@ -302,7 +319,7 @@
           message: "确定要删除 '" + row.label + "' 吗？",
           callback: flag => {
             if (flag) {
-              systemApi({url: MapperURLManager.deleteMapper(),data:row})
+              systemApi({url: MapperURLManager.deleteMapper(), data: row})
                 .then(data => {
                   this.tableData.splice(index, 1);
                 });
