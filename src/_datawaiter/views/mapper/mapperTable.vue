@@ -10,7 +10,11 @@
     <mapper-c-r-u-d :mapperdialog="mapperdialog" v-if="mapperdialog.show" :databaseId="databaseId"
                     :mapper="mapperdialog.data"></mapper-c-r-u-d>
 
-    <el-dialog :title="autoAddBeanDialog.title" :visible.sync="autoAddBeanDialog.show" :width="autoAddBeanDialog.width">
+    <el-dialog
+
+      :title="autoAddBeanDialog.title"
+      :visible.sync="autoAddBeanDialog.show"
+      :width="autoAddBeanDialog.width">
       <!--<table-custom :datas="autoAddBeanDialog.datas" :columns="autoAddBeanDialog.columns"></table-custom>-->
 
       <el-row :gutter="24">
@@ -121,6 +125,7 @@
                 label: "编辑",
                 type: "warning",
                 click: (index, row) => {
+
                   this.editMapper(index, row);
                 },
               },
@@ -156,6 +161,7 @@
       this.init();
     },
     methods: {
+
       //添加 基础 的bean
       click_AutoAddBeanDialogOk(autoCreateMapperArray) {
         let formdata = new FormData();
@@ -226,8 +232,8 @@
       },
 
       mapperdialogOk(dialog) {
-
         let mapper = dialog.data;
+        //console.log(3,mapper)
         dialog.show = false;
         systemApi({
           url: MapperURLManager.editMapper(),
@@ -266,6 +272,7 @@
       },
 
       editMapper(index, mapper) {
+
         let dialog = this.mapperdialog;
         systemApi({url: MapperURLManager.findMapperById(mapper.id)})
           .then(mapper => {

@@ -26,6 +26,7 @@
   import LevelURLManager from '@/_datawaiter/api/LevelURLManager.js'
   import DrawerCustom from "../../components/drawerCustom";
   import ApiCRUD from "./apiCRUD";
+  import MapperURLManager from '@/_datawaiter/api/MapperURLManager.js'
 
   export default {
     name: "ApiManager",
@@ -51,7 +52,7 @@
           },
           {
             label: "数据库名称",
-            prop: "databaseConnectId",
+            prop: "databaseId",
             isShow: true,
             align: "center",
             formatter: (value) => {
@@ -187,13 +188,32 @@
       /**
        * 打开网页
        * @param index
-       * @param row
+       * @param api
        */
-      openURL(index, row) {
+      openURL(index, api) {
 
-        let url = window.datawaiterip + "/datawaiter" + row.rootURL + "/" + row.selfURL;
-        systemApi({url: ApiURLManager.findParamsByApiId() + row.id})
+        let url = window.datawaiterip + "/datawaiter" + api.rootURL + "/" + api.selfURL;
+
+        systemApi({url: MapperURLManager.findMapperById(api.mapperId)})
+          .then(mapper => {
+              if(api.crud === 'SELECT'){
+                let resultColumns =  mapper.resultColumns;
+                if(resultColumns && resultColumns.length > 0){
+                  url = url + "?";
+                  for (let resultColumn of resultColumns) {
+                    //console.log(resultColumn)
+                    url = url + resultColumn.property.trim() + "=" + resultColumn.testValue;
+                  }
+                  url = url.replace("[", "").replace("]", "");
+                }
+                //console.log(url);
+                window.open(url, '_blank')
+              }
+          });
+
+       /* systemApi({url: Mapp.findParamsByApiId() + row.id})
           .then(datas => {
+            console.log()
             row.params = datas;
             if (row.params && row.params.length > 0) {
               url = url + "?";
@@ -203,7 +223,7 @@
               url = url.replace("[", "").replace("]", "");
             }
             window.open(url, '_blank')
-          });
+          });*/
       },
 
 
@@ -234,16 +254,15 @@
         dialog.show = true;
       },
       newFormRows() {
-
+        //console.log(4,this.poolArray)
         return [
           {name: 'label', label: "api标签："},
           {name: 'rootURL', label: "根URL：", disabled: true},
           {name: 'selfURL', label: "本级URL："},
-          {name: 'databaseConnectId', label: "数据库类型：", type: "select", options: this.poolArray,},
+          {name: 'databaseId', label: "数据库类型：", type: "select", options: this.poolArray,},
           {name: 'questMethod', label: "请求方式：", type: "select", options: this.questMethodArray},
           {name: 'accessId', label: "访问控制：", type: "select", options: this.accessArray},
           {name: 'crud', label: "数据操作：", type: "select", options: this.crudArray},
-          {name: 'sql_', label: "SQL语句："},
           {
             name: 'id',
             label: "",
@@ -269,16 +288,12 @@
             id: id,
             label: "",
             accessId: this.accessArray[0].id,
-            params: [],
             rootURL: this.rootURL,
             levelId: this.levelId,
-            databaseConnectId: this.poolArray[0].id,
+            databaseId: this.poolArray[0].id,
             questMethod: this.questMethodArray[0],
             crud:this.crudArray[0].id,
-            sql_: "",
           };
-
-
         return data;
       },
       findRootURL(url, level) {
@@ -354,6 +369,7 @@
         this.accessMap =  this.$store.state.share.accessMap;
         this.crudArray =  this.$store.state.share.crudArray;
         this.crudMap =  this.$store.state.share.crudMap;
+
         /*
         systemApi({url: SysURLManager.findEnums(this.$strTool.questmethodenumname)})
           .then(datas => {

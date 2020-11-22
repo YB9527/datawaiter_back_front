@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-drawer
-
+      :append-to-body="true"
       :title="modeldialog.title"
       :visible.sync="modeldialog.show"
       direction="ltr"
@@ -9,8 +9,6 @@
       :size=modeldialog.width
     >
       <div class="demo-drawer__content" style="padding-left: 20px;padding-right: 20px">
-
-
         <div class="form-group row">
           <label class="col-sm-3 col-form-label">api标签：</label>
           <div class="col-sm-9">
@@ -32,6 +30,13 @@
           </div>
         </div>
         <div class="form-group row">
+          <label class="col-sm-3 col-form-label">访问地址：</label>
+          <div class="col-sm-9">
+            <input type="email" class="form-control" :disabled="true"  v-model="datawaiterip">
+          </div>
+        </div>
+
+        <div class="form-group row">
           <label class="col-sm-3 col-form-label">访问控制：</label>
           <div class="col-sm-9">
             <el-select v-model="api.accessId" @input="onInput()">
@@ -48,7 +53,7 @@
         <div class="form-group row">
           <label class="col-sm-3 col-form-label">数据库：</label>
           <div class="col-sm-9">
-            <el-select v-model="api.databaseConnectId" @input="onInput()">
+            <el-select v-model="api.databaseId" @input="onInput()">
               <el-option
                 v-for="(item,i) in $parent.poolArray"
                 :key="i"
@@ -88,11 +93,23 @@
             </el-select>
           </div>
         </div>
-        <div class="form-group row" v-show="api.questMethod === 'GET'">
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label">Mapper：</label>
+          <div class="col-sm-9">
+
+            <mapper-select  :dataCustom="{data:api,key:'mapperId'}"
+                            :databaseId="api.databaseId"
+                            :crudEnum="api.crud"></mapper-select>
+            <el-button style="float: right" @click="lookMapper(api.mapperId)" type="info">查看</el-button>
+
+          </div>
+        </div>
+
+      <!--  <div class="form-group row" v-show="api.questMethod === 'GET'">
           <label class="col-sm-3 col-form-label">SQL语句：</label>
           <div class="col-sm-9">
               <input type="textarea" class="form-control" v-model="api.sql_">
-           <!-- <el-input type="textarea" v-model="api.sql_"></el-input>-->
+           &lt;!&ndash; <el-input type="textarea" v-model="api.sql_"></el-input>&ndash;&gt;
           </div>
         </div>
         <el-table
@@ -124,7 +141,7 @@
                 @click="removeParam(scope.$index, scope.row)">删除</el-button>
             </template>
           </el-table-column>
-        </el-table>
+        </el-table>-->
 
       <!--  <table class="table table-bordered">
           <thead>
@@ -166,6 +183,8 @@
       <table-custom :datas="preveiwDialog.datas" :columns="preveiwDialog.columns"></table-custom>
     </el-dialog>
 
+    <mapper-c-r-u-d :mapperdialog="mapperdialog" v-if="mapperdialog.show"
+                    :mapper="mapperdialog.data"></mapper-c-r-u-d>
   </div>
 
 
@@ -177,10 +196,13 @@
   import DialogCustom from "../../components/dialogCustom";
   import {systemApi} from '@/_datawaiter/api/datarequset.js';
   import ApiURLManager from '@/_datawaiter/api/ApiURLManager.js'
-
+  import DatabaseConnURLManager from '@/_datawaiter/api/DatabaseConnURLManager.js'
+  import MapperURLManager from '@/_datawaiter/api/MapperURLManager.js'
+  import MapperSelect from "../mapper/mapperSelect";
+  import MapperCRUD from "../mapper/mapperCRUD";
   export default {
     name: "apiCRUD",
-    components: {DialogCustom, TableCustom, FormCustom},
+    components: {MapperCRUD, MapperSelect, DialogCustom, TableCustom, FormCustom},
     props: {
       api: {},
       modeldialog: {
@@ -196,6 +218,8 @@
     },
     data() {
       return {
+        datawaiterip:'',
+
         preveiwDialog: {
           show: false,
           width: '80%',
@@ -274,16 +298,57 @@
           elform: {},
           okClickName: "paramDialogOk"
         },
-
+        mapperdialog: {
+          show: false,
+          width: '100%',
+          titlepo: {edit: "编辑Mapper"},
+          title: "",
+          currenthandle: "",
+          data: {},
+          okClickName:'mapperdialogOk'
+        },
       };
     },
     created() {
       this.api = this.modeldialog.elform.data;
-
+      this.setdatawaiterip();
+    },
+    watch:{
+      'api.selfURL'(){
+       this.setdatawaiterip();
+      }
     },
 
-
     methods: {
+      setdatawaiterip(){
+        this.datawaiterip =   window.datawaiterip+'/'+'datawaiter'+this.api.rootURL+'/'+this.api.selfURL
+      },
+
+      mapperdialogOk(dialog) {
+        //console.log(111)
+        let mapper = dialog.data;
+        dialog.show = false;
+        systemApi({
+          url: MapperURLManager.editMapper(),
+          data: mapper,
+        }).then(count => {
+          if (dialog.currenthandle === this.$strTool.modelhandle[0]) {
+            this.tableData.push(mapper);
+          } else if (dialog.currenthandle === this.$strTool.modelhandle[2]) {
+            this.$tool.replaceModel(this.tableData,mapper);
+          }
+        });
+      },
+      lookMapper(mapperId){
+        let dialog = this.mapperdialog;
+        systemApi({url: MapperURLManager.findMapperById(mapperId)})
+          .then(mapper => {
+            dialog.data = mapper;
+            dialog.title = dialog.titlepo.edit;
+            dialog.currenthandle = this.$strTool.modelhandle[2];
+            dialog.show = true;
+          });
+      },
       questMethodChange() {
         switch (this.api.questMethod) {
           case "GET":

@@ -10,6 +10,9 @@ const state = {
   accessMap:{},
   autoCreateMapperArray:[],
   autoCreateMapperMap:{},
+  mapperCreateEnumArray:[],
+  mapperCreateEnumMap:{},
+
 };
 export default {
   state,

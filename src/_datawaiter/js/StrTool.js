@@ -25,3 +25,7 @@ exports.mappertablename = mappertablename;
 
 var PoRelation =  "cn.yb.datawaiter.model.PoRelation";
 exports.PoRelation = PoRelation;
+
+
+var MapperCreateEnum =  "cn.yb.datawaiter.model.MapperCreateEnum";
+exports.MapperCreateEnum = MapperCreateEnum;

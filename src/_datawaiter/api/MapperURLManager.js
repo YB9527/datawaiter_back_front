@@ -44,3 +44,15 @@ var   findMappersByDatabaseId = function (id) {
   return baseurl+"/findMappersByDatabaseId?databaseId="+id;
 };
 exports.findMappersByDatabaseId = findMappersByDatabaseId;
+
+
+var   editResultColumnCUD = function () {
+  return baseurl+"/editResultColumnCUD";
+};
+exports.editResultColumnCUD = editResultColumnCUD;
+
+
+var   findResultColumnCUDByMapperId = function (mapperId) {
+  return baseurl+"/findResultColumnCUDByMapperId?mapperId="+mapperId;
+};
+exports.findResultColumnCUDByMapperId = findResultColumnCUDByMapperId;

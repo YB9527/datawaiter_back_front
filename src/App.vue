@@ -53,6 +53,11 @@ export default {
           this.$store.state.share.poRelationArray = datas;
           this.$store.state.share.poRelationMap = this.$tool.groupByAttributeSingle(datas);
         });
+      systemApi({url: SysURLManager.findEnums(this.$strTool.MapperCreateEnum)})
+        .then(datas => {
+          this.$store.state.share.mapperCreateEnumArray = datas;
+          this.$store.state.share.mapperCreateEnumMap = this.$tool.groupByAttributeSingle(datas);
+        });
     },
   }
 }

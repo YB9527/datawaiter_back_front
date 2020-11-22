@@ -21,6 +21,7 @@ var   findAll = function () {
 exports.findAll = findAll;
 
 var   findTableAllByDatabaseId = function () {
+
   return baseurl+"/findTableAllByDatabaseId?id=" ;
 };
 exports.findTableAllByDatabaseId = findTableAllByDatabaseId;
