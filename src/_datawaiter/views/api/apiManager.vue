@@ -202,9 +202,12 @@
                   url = url + "?";
                   for (let resultColumn of resultColumns) {
                     //console.log(resultColumn)
-                    url = url + resultColumn.property.trim() + "=" + resultColumn.testValue;
+                    url = url + resultColumn.property.trim() + "=" + resultColumn.testValue+"&";
                   }
-                  url = url.replace("[", "").replace("]", "");
+                  //console.log(url);
+                  url = url.replace(new RegExp("\\[","gm"), "").replace(new RegExp("]","gm"), "");
+                  url = url.substring(0,url.length-1);
+                  //console.log(url);
                 }
                 window.open(url, '_blank')
               }

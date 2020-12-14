@@ -98,7 +98,13 @@
             label: "sql语句",
             prop: "sql_",
             isShow: true,
-            align: "center"
+            align: "center",
+            formatter:val=>{
+              if(val && val.length > 100){
+                return val.substring(0,100)+"...";
+              }
+              return val;
+            }
           },
           {
             label: "API数量",

@@ -10,7 +10,7 @@
     >
       <div class="demo-drawer__content" style="padding-left: 20px;padding-right: 20px">
         <div class="form-group row">
-          <label class=" col-form-label">表格：</label>
+          <label class=" col-form-label ">表格：</label>
           <div class="col-sm-2">
             <input type="email" class="form-control" v-model="mapper.tableName" :disabled="true">
           </div>
@@ -30,113 +30,118 @@
               </el-option>
             </el-select>
           </div>
-          <label class="col-form-label" v-show="mapper.crud === 'SELECT'">SQL语句：</label>
-          <div class="col-sm-5" v-show="mapper.crud === 'SELECT'">
-            <input type="textarea" class="form-control" v-model="mapper.sql_">
+
+          <!--  <input type="textarea" class="form-control" v-model="mapper.sql_">-->
             <!-- <el-input type="textarea" v-model="mapper.sql_"></el-input>-->
           </div>
         </div>
-        <div v-show="mapper.crud === 'SELECT'">
-          <div class="grid-content bg-purple" style="padding-left: 20px">
-            <h5 style="line-height: 40px"> 参数替换 、 字段映射 </h5>
-          </div>
-          <el-table
-            :data="mapper.resultColumns"
-            style="width: 100%">
-            <el-table-column
-              label='property'
-            >
-              <template slot-scope="scope">
-                <input class="form-control" v-model="scope.row.property">
-              </template>
-            </el-table-column>
-
-            <el-table-column
-              label='对象关系'
-            >
-              <template slot-scope="scope">
-                <el-select v-model="scope.row.poRelation">
-                  <el-option
-                    v-for="item in $store.state.share.poRelationArray"
-                    :key="item.id"
-                    :label="item.label"
-                    :value="item.id">
-                  </el-option>
-                </el-select>
-              </template>
-            </el-table-column>
-
-
-            <el-table-column
-              prop="mapperId"
-              label='映射'
-            >
-              <template slot-scope="scope">
-                <!--  <el-cascader  v-model="scope.row.column_MapperId" :props="props"   :options="tables">
-                  </el-cascader>-->
-
-                <mapper-select  v-if="scope.row.poRelation !== 'no'"
-                                :dataCustom="{data:scope.row,key:'column_MapperId'}"
-                                :databaseId="mapper.databaseId"
-                                :isReflect="true"
-                                @mapperSelectChange="mapperSelectChange"
-                                :crudEnum="'SELECT'"></mapper-select>
-               <!-- <el-cascader
-                  placeholder="选择映射"
-                  v-if="scope.row.poRelation !== 'no'"
-                  v-model="scope.row.column_MapperId"
-                  :options="column_MapperIdOptions"
-                ></el-cascader>-->
-              </template>
-            </el-table-column>
-
-            <el-table-column
-              label='映射对象字段'
-            >
-              <template slot-scope="scope">
-                <input class="form-control" :disabled="true" v-model="scope.row.column_" v-if="scope.row.poRelation !== 'no'">
-              </template>
-            </el-table-column>
-
-            <el-table-column
-              label='测试值'
-            >
-              <template slot-scope="scope">
-                <input class="form-control" v-model="scope.row.testValue" v-if="scope.row.poRelation === 'no'">
-              </template>
-            </el-table-column>
-
-            <el-table-column
-              align="right"
-            >
-              <template slot="header" slot-scope="scope">
-                <el-button type="info" @click="addResultColumn" size="mini" plain>添加参数</el-button>
-                <el-button type="info" @click="previewingData(mapper)" v-if="mapper.crud === 'SELECT'" size="mini"
-                           plain>预览
-                </el-button>
-                <el-button type="info" v-if="mapper.crud !== 'SELECT'" size="mini" plain>测试</el-button>
-              </template>
-              <template slot-scope="scope">
-                <el-button
-                  size="mini"
-                  @click="removeResultColumn(scope.$index, scope.row)">删除
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-
-        </div>
-        <cud-config :mapper="mapper" style="text-align: center;width: 500px" v-show="mapper.crud !== 'SELECT'">
-
-
-        </cud-config>
-
-        <div class="demo-drawer__footer" style="float: right">
-          <el-button @click="cancel" size="medium">取 消</el-button>
-          <el-button type="primary" @click="ok" size="medium">确 定</el-button>
+        <div class="form-group row" style="margin-left: 20%">
+          <label class="col-form-label" v-show="mapper.crud === 'SELECT'">SQL语句：</label>
+          <div class="col-sm-8" v-show="mapper.crud === 'SELECT'">
+            <el-input
+              type="textarea"
+              :autosize="{ minRows: 2}"
+              v-model="mapper.sql_">
+            </el-input>
         </div>
       </div>
+      <div v-show="mapper.crud === 'SELECT'">
+        <div class="grid-content bg-purple" style="padding-left: 20px">
+          <h5 style="line-height: 40px"> 参数替换 、 字段映射 </h5>
+        </div>
+        <el-table
+          :data="mapper.resultColumns"
+          style="width: 100%">
+          <el-table-column
+            label='property'
+          >
+            <template slot-scope="scope">
+              <input class="form-control" v-model="scope.row.property">
+            </template>
+          </el-table-column>
 
+          <el-table-column
+            label='对象关系'
+          >
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.poRelation">
+                <el-option
+                  v-for="item in $store.state.share.poRelationArray"
+                  :key="item.id"
+                  :label="item.label"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+
+
+          <el-table-column
+            prop="mapperId"
+            label='映射'
+          >
+            <template slot-scope="scope">
+              <!--  <el-cascader  v-model="scope.row.column_MapperId" :props="props"   :options="tables">
+                </el-cascader>-->
+
+              <mapper-select  v-if="scope.row.poRelation !== 'no'"
+                              :dataCustom="{data:scope.row,key:'column_MapperId'}"
+                              :databaseId="mapper.databaseId"
+                              :isReflect="true"
+                              @mapperSelectChange="mapperSelectChange"
+                              :crudEnum="'SELECT'"></mapper-select>
+              <!-- <el-cascader
+                 placeholder="选择映射"
+                 v-if="scope.row.poRelation !== 'no'"
+                 v-model="scope.row.column_MapperId"
+                 :options="column_MapperIdOptions"
+               ></el-cascader>-->
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            label='映射对象字段'
+          >
+            <template slot-scope="scope">
+              <input class="form-control" :disabled="true" v-model="scope.row.column_" v-if="scope.row.poRelation !== 'no'">
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            label='测试值'
+          >
+            <template slot-scope="scope">
+              <input class="form-control" v-model="scope.row.testValue" v-if="scope.row.poRelation === 'no'">
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            align="right"
+          >
+            <template slot="header" slot-scope="scope">
+              <el-button type="info" @click="addResultColumn" size="mini" plain>添加参数</el-button>
+              <el-button type="info" @click="previewingData(mapper)" v-if="mapper.crud === 'SELECT'" size="mini"
+                         plain>预览
+              </el-button>
+              <el-button type="info" v-if="mapper.crud !== 'SELECT'" size="mini" plain>测试</el-button>
+            </template>
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="removeResultColumn(scope.$index, scope.row)">删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+
+      </div>
+      <cud-config :mapper="mapper" style="text-align: center;width: 500px" v-show="mapper.crud !== 'SELECT'">
+      </cud-config>
+
+      <div class="demo-drawer__footer" style="float: right">
+        <el-button @click="cancel" size="medium">取 消</el-button>
+        <el-button type="primary" @click="ok" size="medium">确 定</el-button>
+      </div>
       <el-dialog
         :append-to-body="true"
         :title="preveiwDialog.title" :visible.sync="preveiwDialog.show" :width="preveiwDialog.width">

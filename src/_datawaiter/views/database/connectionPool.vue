@@ -1,6 +1,7 @@
 <template>
   <div>
-    <el-button type="warning" @click="testConn">测试事务</el-button>
+    <el-button @click="addTestData">添加测试数据</el-button>
+   <!-- <el-button type="warning" @click="testConn">测试事务</el-button>-->
     <TableCustom
       :datas="tableData"
       :columns="columns"
@@ -161,6 +162,65 @@
 
     },
     methods: {
+      /*添加测试数据*/
+      addTestData(){
+        console.log(this.$store.state.xzq.xzqAll);
+        let  xzqys = this.$store.state.xzq.xzqAll;
+        let dcsj = [2013,2014,2015,2016,2017,2018];
+        let lx=[[11,12,13,14,15,16,17,18],[21,22,23,24,25,29],[99]];
+        let datas = [];
+        for (let i = 0; i < 2000; i++) {
+          let data = {
+            xzqdm: xzqys[parseInt( Math.random()*xzqys.length)].xzqdm,
+            dcsj:dcsj[parseInt( Math.random()*dcsj.length)],
+            mbzwlx:"",
+            mbzwlxmj:"",
+            mbzwlxmjm:"",
+            fmbzwlx:"",
+            fmbzwlxmj:"",
+            fmbzwlxmjm:"",
+            qtlx:"",
+            qtlxmj:"",
+            qtlxmjm:"",
+            id:i,
+            dks:500 + parseInt( Math.random()*10000),
+          };
+          datas.push(data);
+          switch(i % 6){
+            case 0:
+            case 1:
+            case 2:
+              data.mbzwlx=lx[0][parseInt(Math.random()*lx[0].length)];
+              data.mbzwlxmj=  Math.random()*58898136.18;
+              data.mbzwlxmjm= data.mbzwlxmj *0.0015;
+              break;
+            case 3:
+            case 4:
+              data.fmbzwlx=lx[1][parseInt( Math.random()*lx[1].length)];
+              data.fmbzwlxmj=  Math.random()*58898136.18;
+              data.fmbzwlxmjm= data.fmbzwlxmj *0.0015;
+              break;
+            case 5:
+              data.qtlx=lx[2][parseInt(Math.random()*lx[2].length)];
+              data.qtlxmj=  Math.random()*58898136.18;
+              data.qtlxmjm= data.fmbzwlxmj *0.0015;
+              break;
+          }
+
+        }
+        let formdata = new FormData();
+        formdata.append("tj_lqdkzzqk",JSON.stringify(datas));
+        systemApi({url:"http://127.0.0.1:3333/datawaiter/slq/jg/saveTJ_LQDKZZQK",data:formdata})
+          .then(data=>{
+            console.log(data);
+          })
+     /*   axios({
+          url:"http://127.0.0.1:3333/datawaiter/slq/jg/saveTJ_LQDKZZQK",
+          data:formdata,
+        }).then(data=>{
+          console.log(data);
+        });*/
+      },
       testConn() {
 
        /* systemApi({url: 'http://127.0.0.1:3333/datawaiter/root/finduser'})
