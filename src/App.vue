@@ -59,6 +59,7 @@ export default {
       systemApi({url: SysURLManager.findEnums(this.$strTool.MapperCreateEnum)})
         .then(datas => {
           this.$store.state.share.mapperCreateEnumArray = datas;
+
           this.$store.state.share.mapperCreateEnumMap = this.$tool.groupByAttributeSingle(datas);
         });
     },
