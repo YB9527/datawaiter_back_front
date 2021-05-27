@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+
     <router-view />
   </div>
 </template>
@@ -44,12 +45,14 @@ export default {
         .then(autoCreateMapperArray => {
           for (let autoCreateMapper of autoCreateMapperArray) {
             autoCreateMapper.checked = true;
+            break;
           }
           this.$store.state.share.autoCreateMapperArray = autoCreateMapperArray;
           this.$store.state.share.autoCreateMapperMap = this.$tool.groupByAttributeSingle(autoCreateMapperArray);
         });
       systemApi({url: SysURLManager.findEnums(this.$strTool.PoRelation)})
         .then(datas => {
+
           this.$store.state.share.poRelationArray = datas;
           this.$store.state.share.poRelationMap = this.$tool.groupByAttributeSingle(datas);
         });
@@ -65,7 +68,11 @@ export default {
 <style>
   .matchparent{
     height: 100%;
+
     width: 100%;
+  }
+  .a{
+
   }
   .el-select {
     width: 100%;
