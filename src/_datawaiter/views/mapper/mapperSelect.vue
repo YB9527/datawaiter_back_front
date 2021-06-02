@@ -63,6 +63,7 @@
     },
     methods: {
       init(){
+        console.log(1,this.databaseId);
         //console.log(11111)
         //console.log(3,this.dataCustom);
         this.self_mapperId = this.mapperId;

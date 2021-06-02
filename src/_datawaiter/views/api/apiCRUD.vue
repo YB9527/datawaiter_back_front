@@ -37,6 +37,13 @@
         </div>
 
         <div class="form-group row">
+          <label class="col-sm-3 col-form-label">无ip地址：</label>
+          <div class="col-sm-9">
+            {{this.api.rootURL+'/'+this.api.selfURL}}
+          </div>
+        </div>
+
+        <div class="form-group row">
           <label class="col-sm-3 col-form-label">访问控制：</label>
           <div class="col-sm-9">
             <el-select v-model="api.accessId" @input="onInput()">
@@ -53,7 +60,7 @@
         <div class="form-group row">
           <label class="col-sm-3 col-form-label">数据库：</label>
           <div class="col-sm-9">
-            <el-select v-model="api.databaseId" @input="onInput()">
+            <el-select v-model="api.databaseConnectId" @input="onInput()">
               <el-option
                 v-for="(item,i) in $parent.poolArray"
                 :key="i"
@@ -98,7 +105,7 @@
           <div class="col-sm-9">
 
             <mapper-select  :dataCustom="{data:api,key:'mapperId'}"
-                            :databaseId="api.databaseId"
+                            :databaseId="api.databaseConnectId"
                             :crudEnum="api.crud"></mapper-select>
             <el-button style="float: right" @click="lookMapper(api.mapperId)" type="info">查看</el-button>
 
