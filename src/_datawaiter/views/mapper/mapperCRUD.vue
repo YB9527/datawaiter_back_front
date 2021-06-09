@@ -218,12 +218,14 @@
     created() {
      // console.log(1,this.mapperdialog);
       let databaseId = this.mapper.databaseId;
+      //console.log(this.mapper);
       systemApi({url: DatabaseConnURLManager.findTableAllByDatabaseId() + databaseId})
         .then(tables => {
           this.tables = [];
           for (let table of tables) {
             this.column_MapperIdOptions.push({value: table.name, label: table.name, children: []});
           }
+
           let tableMap = this.$tool.groupByAttributeSingle(this.column_MapperIdOptions, "value");
           this.tables = tables;
           systemApi({url: MapperURLManager.findMappersByDatabaseId(databaseId)})
@@ -232,10 +234,12 @@
                 let tem = tableMap[mapper.tableName];
                 tem.children.push({value: mapper.id, label: mapper.label});
               }
+
               if (this.mapper.resultColumns) {
                 for (let resultColumn of  this.mapper.resultColumns) {
                   if (resultColumn.column_MapperId) {
                     for (let mapper of mappers) {
+
                       if (mapper.id === resultColumn.column_MapperId) {
                         resultColumn.column_MapperId = [mapper.tableName, resultColumn.column_MapperId];
                       }

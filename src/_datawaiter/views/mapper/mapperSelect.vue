@@ -63,9 +63,13 @@
     },
     methods: {
       init(){
+      /*  setTimeout(()=>{
+          console.log(11,this.select);
+          console.log(12,this.column_MapperIdOptions);
+        },3000)
         console.log(1,this.databaseId);
         //console.log(11111)
-        //console.log(3,this.dataCustom);
+        console.log(3,this.dataCustom);*/
         this.self_mapperId = this.mapperId;
         if(!this.databaseId){
           return;
@@ -82,22 +86,32 @@
             for (let table of tables) {
               options.push({value: table.name, label: table.name, children: []});
             }
+
+            console.log(tables);
+            console.log(options);
             let tableMap = this.$tool.groupByAttributeSingle(options, "value");
             systemApi({url: MapperURLManager.findMappersByDatabaseId(this.databaseId)})
               .then(mappers => {
+
                 this.mapperIdMap = this.$tool.groupByAttributeSingle(mappers);
                 for (let mapper of mappers) {
+                  //console.log(mapper.label);
+                  if('餐桌订单——根据canzhuoid查找' ==mapper.label){
+                   // debugger
+                  }
                   let tem = tableMap[mapper.tableName];
                   if(this.isReflect){
                     //如果选择的是映射对象，那么，resultcoumns 个数必须是 1
                     if(!mapper.resultColumns || mapper.resultColumns.length !== 1){
-                      continue;
+                      //continue;
                     }
                   }
+
                   if ((this.crudEnum === 'SELECT' && mapper.crud ===  'SELECT') || (this.crudEnum !== 'SELECT' && mapper.crud !==  'SELECT')) {
                     tem.children.push({value: mapper.id, label: mapper.label});
                   }
                 }
+
                 this.removeNoChild(options);
                 if(yuanlaiCount > 0){
                   this.column_MapperIdOptions.splice(0,yuanlaiCount);

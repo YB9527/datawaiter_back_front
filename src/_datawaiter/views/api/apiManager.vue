@@ -52,7 +52,7 @@
           },
           {
             label: "数据库名称",
-            prop: "databaseId",
+            prop: "databaseConnectId",
             isShow: true,
             align: "center",
             formatter: (value) => {
@@ -202,7 +202,10 @@
                   url = url + "?";
                   for (let resultColumn of resultColumns) {
                     //console.log(resultColumn)
-                    url = url + resultColumn.property.trim() + "=" + resultColumn.testValue+"&";
+                    if(resultColumn.poRelation === "no"){
+                      url = url + resultColumn.property.trim() + "=" + resultColumn.testValue+"&";
+                    }
+
                   }
                   //console.log(url);
                   url = url.replace(new RegExp("\\[","gm"), "").replace(new RegExp("]","gm"), "");
@@ -353,6 +356,7 @@
         systemApi({url: ApiURLManager.findByLevelId() + this.levelId})
           .then(datas => {
             this.tableData = datas;
+            console.log(1,datas);
           });
         systemApi({url: LevelURLManager.findLevelAndParentId() + this.levelId})
           .then(level => {
@@ -364,6 +368,7 @@
           .then(datas => {
             this.poolArray = datas;
             this.poolMap = this.$tool.groupByAttributeSingle(datas);
+            console.log(this.poolMap);
           });
 
         this.questMethodArray =  this.$store.state.share.questMethodArray;
