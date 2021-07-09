@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button @click="addTestData">添加测试数据</el-button>
+  <!--  <el-button @click="addTestData">添加测试数据</el-button>-->
    <!-- <el-button type="warning" @click="testConn">测试事务</el-button>-->
     <TableCustom
       :datas="tableData"
@@ -91,6 +91,7 @@
             isShow: true,
             align: "center"
           },
+
           {
             type: "button",
             label: "操作",
@@ -98,13 +99,21 @@
             prop: "",
             isShow: true,
             align: "center",
-            headers: [{
+            headers: [
+              {
               type: 'button',
               label: "添加连接",
               click: () => {
                 this.addConnection();
               },
-            }],
+            },
+              {
+                type: 'button',
+                label: "断开所有连接",
+                click: () => {
+                  this.breakConnection();
+                },
+              }],
             list: [
               /*{
                 label: "查看",
@@ -162,6 +171,10 @@
 
     },
     methods: {
+      breakConnection(){
+        let url = window.datawaiterip + "/sys/breakconnect" ;
+        systemApi({url});
+      },
       /*添加测试数据*/
       addTestData(){
         console.log(this.$store.state.xzq.xzqAll);

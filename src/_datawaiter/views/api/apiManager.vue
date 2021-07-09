@@ -233,6 +233,10 @@
 
 
       modeldialogOk(dialog) {
+        console.log(dialog);
+        if(dialog.title === dialog.titlepo.add){
+          localStorage.setItem('databaseConnectId',dialog.elform.data.databaseConnectId);
+        }
 
         let map = {api: dialog.elform.data, params: dialog.elform.data.params};
 
@@ -278,6 +282,8 @@
         ];
       },
       newApi() {
+
+
         let data = this.modeldialog.elform.data;
         let id = this.$uuid.v4();
         if (data) {
@@ -295,10 +301,11 @@
             accessId: this.accessArray[0].id,
             rootURL: this.rootURL,
             levelId: this.levelId,
-            databaseId: this.poolArray[0].id,
+            databaseConnectId: this.poolArray[0].id,
             questMethod: this.questMethodArray[0],
             crud:this.crudArray[0].id,
           };
+        data.databaseConnectId  = localStorage.getItem('databaseConnectId');
         return data;
       },
       findRootURL(url, level) {

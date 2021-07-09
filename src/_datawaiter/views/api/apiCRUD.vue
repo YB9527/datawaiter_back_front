@@ -12,7 +12,7 @@
         <div class="form-group row">
           <label class="col-sm-3 col-form-label">api标签：</label>
           <div class="col-sm-9">
-            <input type="email" class="form-control" v-model="api.label">
+            <input type="email" class="form-control" v-model="data.label">
           </div>
         </div>
 
@@ -104,8 +104,10 @@
           <label class="col-sm-3 col-form-label">Mapper：</label>
           <div class="col-sm-9">
 
-            <mapper-select  :dataCustom="{data:api,key:'mapperId'}"
+            <mapper-select  :dataCustom="{data:api,key:'mapperId',ok:(label=>{mapperdialogOkCallback(label) })}"
+                            :api="api"
                             :databaseId="api.databaseConnectId"
+
                             :crudEnum="api.crud"></mapper-select>
             <el-button style="float: right" @click="lookMapper(api.mapperId)" type="info">查看</el-button>
 
@@ -226,7 +228,7 @@
     data() {
       return {
         datawaiterip:'',
-
+        data:"",
         preveiwDialog: {
           show: false,
           width: '80%',
@@ -318,20 +320,36 @@
     },
     created() {
       this.api = this.modeldialog.elform.data;
+      this.data = this.api;
       this.setdatawaiterip();
+      //this.test();
     },
     watch:{
       'api.selfURL'(){
        this.setdatawaiterip();
-      }
-    },
+      },
 
+    },
     methods: {
+     /* test(){
+        this.aa =  this.aa? ++this.aa:1;
+        setTimeout(()=>{
+          console.log(this.aa);
+         this.api.label = this.aa;
+          this.test();
+        },2000)
+      },*/
       setdatawaiterip(){
         this.datawaiterip =   window.datawaiterip+'/'+'datawaiter'+this.api.rootURL+'/'+this.api.selfURL;
         //console.log(this.datawaiterip)
       },
+      mapperdialogOkCallback(mapper){
+        if(!this.data.label){
+          this.data.label = mapper;
+        }
 
+        //console.log(mapper)
+      },
       mapperdialogOk(dialog) {
         //console.log(111)
         let mapper = dialog.data;
@@ -514,6 +532,7 @@
         }
       },
       ok() {
+
 
         if (this.modeldialog.okClickName) {
           this.$parent[this.modeldialog.okClickName](this.modeldialog);

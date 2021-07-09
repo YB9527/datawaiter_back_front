@@ -16,6 +16,7 @@
     name: "mapperSelect",
     props: {
       dataCustom: {data: {}, key: ''},
+      api:"",
       databaseId: '',
       crudEnum: '',
       value:'',
@@ -43,7 +44,11 @@
           let data = {data:this.dataCustom.data,mapper: this.mapperIdMap[mapperId]};
           //data={aa:'123',bb:'11111'};
           //console.log(1,data)
+          //console.log(this.dataCustom);
+         // this.dataCustom.ok(this.mapperIdMap[mapperId].label);
           this.$emit('mapperSelectChange',data);
+
+
         }
       },
       databaseId(){
@@ -60,6 +65,7 @@
     created() {
 
       this.init();
+
     },
     methods: {
       init(){
