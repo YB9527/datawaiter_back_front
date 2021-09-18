@@ -23,7 +23,6 @@ export default {
       systemApi({url: DatabaseConnURLManager.findDatabaseEnum()})
         .then(datas => {
           this.$store.state.share.databaseEnumArray = datas;
-
         });
       systemApi({url: SysURLManager.findEnums(this.$strTool.questmethodenumname)})
         .then(datas => {
